@@ -1,0 +1,25 @@
+{
+  "name": "@maple/hardhat-scripts",
+  "version": "1.0.0",
+  "description": "Hardhat Ethereum Scripts used at Maple Labs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maple-labs/hardhat-scripts.git"
+  },
+  "keywords": [
+    "Ethereum",
+    "Hardhat",
+    "Scripts",
+    "Maple"
+  ],
+  "author": "Chad Lynch",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/maple-labs/hardhat-scripts/issues"
+  },
+  "homepage": "https://github.com/maple-labs/hardhat-scripts#readme"
+}
