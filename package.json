@@ -23,8 +23,7 @@
   },
   "homepage": "https://github.com/maple-labs/hardhat-scripts#readme",
   "dependencies": {
-    "chalk": "^4.1.0",
-    "hardhat": "^2.0.3"
+    "chalk": "^4.1.0"
   },
   "devDependencies": {}
 }
