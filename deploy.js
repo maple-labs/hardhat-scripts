@@ -13,7 +13,6 @@ async function deploy(name, _args) {
     chalk.cyan(name),
     'deployed to:',
     chalk.magenta(contract.address),
-    '\n',
   )
   fs.writeFileSync(`artifacts/${name}.address`, contract.address)
 

@@ -38,7 +38,7 @@ async function publish(directories) {
       if (!fs.existsSync(directories[i])) {
         fs.mkdirSync(directories[i])
       }
-      console.log('📚 Publishing', 'to', chalk.yellow(directories[i]))
+      console.log('📚 Publishing', 'to', chalk.yellow(directories[i]), '\n')
       const finalContractList = []
       fs.readdirSync(bre.config.paths.sources).forEach((file) => {
         if (file.indexOf('.sol') >= 0) {
