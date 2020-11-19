@@ -5,7 +5,7 @@ Maple labs uses these deployment scripts for hardhat ethereum packages.
 ## scripts/deploy.js
 
 ```javascript
-const { deploy } = require("@maple/hardhat-scripts");
+const { deploy } = require("@maplelabs/hardhat-scripts");
 
 async function main() {
   const bCreator = await deploy("MyContract", [param1, param2]);
@@ -22,7 +22,7 @@ main()
 ## srcripts/publish.js
 
 ```javascript
-const { publish } = require("@maple/hardhat-scripts");
+const { publish } = require("@maplelabs/hardhat-scripts");
 
 async function main() {
   const directories = [
