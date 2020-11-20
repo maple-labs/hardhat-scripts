@@ -2,34 +2,124 @@ const fs = require('fs')
 const chalk = require('chalk')
 const bre = require('hardhat')
 
-function publishContract(contractName, directory) {
-  let contract = fs
-    .readFileSync(
-      `${bre.config.paths.artifacts}/contracts/${contractName}.sol/${contractName}.json`,
-    )
-    .toString()
+async function publishContract(contractName, directory) {
+  const contractFilePath =
+    `${bre.config.paths.artifacts}/contracts/` +
+    `${contractName}.sol/${contractName}.json`
+  const contract = await require(contractFilePath)
+  const networkFolder = directory + '/' + bre.network.name
+  const networkFile = `${directory}/${bre.network.name}.js`
+
+  if (!fs.existsSync(networkFolder)) {
+    fs.mkdir(networkFolder, console.log)
+  }
+
+  const props = {
+    contract,
+    contractName,
+    networkFolder,
+    directory,
+    networkFile,
+  }
+
+  return Promise.all([
+    createAddressFile(props),
+    createAbiFile(props),
+    createByteCodeFile(props),
+    createRawJsonFile(props),
+  ])
+}
+
+async function createRawJsonFile({ contract, contractName, networkFolder }) {
+  if (!fs.existsSync(`${networkFolder}/json`)) {
+    fs.mkdir(`${networkFolder}/json`, console.log)
+  }
+
+  fs.writeFileSync(
+    `${networkFolder}/json/${contractName}.abi.json`,
+    JSON.stringify(contract.abi),
+    console.log,
+  )
+}
+
+async function createAddressFile({ contractName, networkFolder, networkFile }) {
+  if (!fs.existsSync(`${networkFolder}/addresses`)) {
+    fs.mkdir(`${networkFolder}/addresses`, console.log)
+  }
 
   const addressFile = `${bre.config.paths.artifacts}/${contractName}.address`
 
   if (fs.existsSync(addressFile)) {
     const address = fs.readFileSync(addressFile).toString()
-    contract = JSON.parse(contract)
+
     fs.writeFileSync(
-      `${directory}/${contractName}.address.js`,
+      `${networkFolder}/addresses/${contractName}.address.js`,
       `module.exports = "${address}";`,
     )
+
+    const abiIndex = require(networkFile)
+
+    if (!(`${contractName}Address` in abiIndex)) {
+      const newExport =
+        `module.exports.${contractName}Address` +
+        ` = require('./${bre.network.name}/address/${contractName}.address.js');\n`
+      fs.appendFileSync(networkFile, newExport)
+    }
+  }
+}
+
+async function createAbiFile({
+  contract,
+  contractName,
+  networkFolder,
+  networkFile,
+}) {
+  if (!fs.existsSync(`${networkFolder}/abis`)) {
+    fs.mkdir(`${networkFolder}/abis`, (err, data) => null)
+  }
+
+  const abi = JSON.stringify(contract.abi, null, 2)
+  const abiFileName = `${networkFolder}/abis/${contractName}.abi.js`
+
+  if (!fs.existsSync(networkFile)) {
+    fs.writeFile(networkFile, '', console.log)
+  }
+
+  fs.writeFileSync(abiFileName, `module.exports = ${abi};`, console.log)
+
+  const abiIndex = require(networkFile)
+
+  if (!(`${contractName}Abi` in abiIndex)) {
+    const newExport =
+      `module.exports.${contractName}Abi ` +
+      `= require('./${bre.network.name}/abis/${contractName}.abi.js');\n`
+    fs.appendFileSync(networkFile, newExport)
+  }
+}
+
+async function createByteCodeFile({
+  contract,
+  contractName,
+  networkFolder,
+  networkFile,
+}) {
+  if (!fs.existsSync(`${networkFolder}/bytecode`)) {
+    await fs.mkdir(`${networkFolder}/bytecode`, console.log)
   }
 
   fs.writeFileSync(
-    `${directory}/${contractName}.abi.js`,
-    `module.exports = ${JSON.stringify(contract.abi, null, 2)};`,
-  )
-  fs.writeFileSync(
-    `${directory}/${contractName}.bytecode.js`,
+    `${networkFolder}/bytecode/${contractName}.bytecode.js`,
     `module.exports = "${contract.bytecode}";`,
   )
 
-  return true
+  const abiIndex = require(networkFile)
+
+  if (!(`${contractName}ByteCode` in abiIndex)) {
+    const newExport =
+      `module.exports.${contractName}ByteCode` +
+      ` = require('./${bre.network.name}/bytecode/${contractName}.bytecode.js');\n`
+    fs.appendFileSync(networkFile, newExport)
+  }
 }
 
 async function publish(directories) {
