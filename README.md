@@ -19,7 +19,7 @@ main()
   });
 ```
 
-## srcripts/publish.js
+## scripts/publish.js
 
 ```javascript
 const { publish } = require("@maplelabs/hardhat-scripts");
