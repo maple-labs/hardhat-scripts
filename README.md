@@ -1,6 +1,6 @@
 # Hardhat Scripts
 
-Maple labs uses these deployment scripts for hardhat ethereum packages.
+Maple labs uses these deployment scripts for hardhat ethereum packages. These scripts were inspired by and made for <a href="https://github.com/austintgriffith/scaffold-eth">Scaffold Eth!</a>
 
 ## scripts/deploy.js
 
