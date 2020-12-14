@@ -8,6 +8,7 @@ async function publishContract(contractName, directory) {
     `${contractName}.sol/${contractName}.json`
   const contract = await require(contractFilePath)
   const networkFolder = directory + '/' + bre.network.name
+  const networkFile = `${directory}/${bre.network.name}.js`
 
   if (!fs.existsSync(networkFolder)) {
     fs.mkdir(networkFolder, console.log)
@@ -57,6 +58,13 @@ async function createAddressFile({ contractName, networkFolder, networkFile }) {
     )
 
     const abiIndex = require(networkFile)
+
+    // if (!(`${contractName}Address` in abiIndex)) {
+    //   const newExport =
+    //     `module.exports.${contractName}Address` +
+    //     ` = require('./${bre.network.name}/address/${contractName}.address.js');\n`
+    //   fs.appendFileSync(networkFile, newExport)
+    // }
   }
 }
 
