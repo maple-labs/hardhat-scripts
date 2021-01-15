@@ -12,7 +12,7 @@ async function deploy(name, _args) {
     '  ',
     chalk.cyan(name),
     'deployed to:',
-    chalk.magenta(contract.address),
+    chalk.greenBright(contract.address),
   )
   fs.writeFileSync(`artifacts/${name}.address`, contract.address)
 
