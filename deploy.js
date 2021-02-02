@@ -2,11 +2,12 @@ const fs = require('fs')
 const chalk = require('chalk')
 const { ethers } = require('hardhat')
 
-async function deploy(name, _args) {
+async function deploy(name, _args, _opts) {
   const args = _args || []
+  const opts = _opts || {}
 
   console.log(`🍁 Deploying ${name}`)
-  const contractArtifacts = await ethers.getContractFactory(name)
+  const contractArtifacts = await ethers.getContractFactory(name, opts)
   const contract = await contractArtifacts.deploy(...args)
   console.log(
     '  ',
